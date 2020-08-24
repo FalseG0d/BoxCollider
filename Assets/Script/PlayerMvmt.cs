@@ -13,6 +13,7 @@ public class PlayerMvmt : MonoBehaviour
     public Text scoreText;
     float time = 0;
     int scoreTime;
+    public GameObject pauseUI;
     int penalty = 0;
 
     public GameObject levelCompleteUI;
@@ -65,6 +66,19 @@ public class PlayerMvmt : MonoBehaviour
         if (Input.GetKey("a"))
         {
             rb.AddForce(-sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            if (!pauseUI.active)
+            {
+                pauseUI.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                pauseUI.SetActive(false);
+                Time.timeScale = 1;
+            }
         }
 
     }
