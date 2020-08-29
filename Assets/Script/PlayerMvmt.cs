@@ -13,19 +13,25 @@ public class PlayerMvmt : MonoBehaviour
     public Text scoreText;
     float time = 0;
     int scoreTime;
+
     public GameObject pauseUI;
+
     int penalty = 0;
 
     public GameObject levelCompleteUI;
+    public GameObject welcome;
+
+    AudioSource audioData;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        forwardForce=1000f;
-        sideForce = 50f;
+        
         score = true;
+        audioData = GetComponent<AudioSource>();
         scene = SceneManager.GetActiveScene();
+        //audioData.Play(1);
     }
 
 
@@ -37,6 +43,7 @@ public class PlayerMvmt : MonoBehaviour
             if (scoreTime - 3 > 0)
             {
                 penalty += 3;
+                audioData.Play(0);
                 col.collider.GetComponent<Collider>().enabled = !col.collider.GetComponent<Collider>().enabled;
             }
             else
@@ -55,6 +62,9 @@ public class PlayerMvmt : MonoBehaviour
             score = false;
             Debug.Log("Level Complete");
             levelCompleteUI.SetActive(true);
+            pauseUI.SetActive(true);
+            welcome.SetActive(false);
+
         }
     }
 
@@ -66,19 +76,6 @@ public class PlayerMvmt : MonoBehaviour
         if (Input.GetKey("a"))
         {
             rb.AddForce(-sideForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
-        }
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            if (!pauseUI.active)
-            {
-                pauseUI.SetActive(true);
-                Time.timeScale = 0;
-            }
-            else
-            {
-                pauseUI.SetActive(false);
-                Time.timeScale = 1;
-            }
         }
 
     }
@@ -92,6 +89,7 @@ public class PlayerMvmt : MonoBehaviour
             time += Time.deltaTime;
             scoreTime = (int)time - penalty;
             scoreText.text = scoreTime.ToString();
+            //audioData.Play(1);
         }
     }
 }
